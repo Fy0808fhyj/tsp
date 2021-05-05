@@ -1,0 +1,1930 @@
+Index: helloWorld.ts
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/helloWorld.ts b/helloWorld.ts
+new file mode 100644
+--- /dev/null	(date 1620216912307)
++++ b/helloWorld.ts	(date 1620216912307)
+@@ -0,0 +1,16 @@
++import fs from "fs"
++import puppeteer, {ElementHandle} from "puppeteer-core"
++(async ()=>{
++const data:string=await fs.readFileSync("launch.json","utf-8");
++const browser:puppeteer.Browser=await puppeteer.launch(JSON.parse(data));
++const page:puppeteer.Page=await browser.newPage();
++await page.goto("https://web.sanguosha.com/login/index.html");
++const inputT:Array<ElementHandle>=await page.$$(".dobest_input");
++const checked: ElementHandle | null =await page.$("input[id^='dobest_protocol_']");
++ await inputT[0].type("fy1525569");
++ await inputT[1].type("a4613532");
++ await checked?.click();
++ await inputT[1].press("Enter");
++
++
++})()
+\ No newline at end of file
+Index: requestIntercept.ts
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/requestIntercept.ts b/requestIntercept.ts
+new file mode 100644
+--- /dev/null	(date 1620216912291)
++++ b/requestIntercept.ts	(date 1620216912291)
+@@ -0,0 +1,25 @@
++import puppeteer, {Page} from "puppeteer-core";
++import fs from "fs";
++
++(async () => {
++    const data: string = await fs.readFileSync("launch.json", "utf-8");
++    const browser: puppeteer.Browser = await puppeteer.launch(JSON.parse(data));
++    const page: Page = await (await browser.pages())[0];
++    await page.setRequestInterception(true);
++    page.on("request", request=>{
++        if (request.resourceType()==="image"){
++            request.abort();
++            console.log(request.url());;
++        }
++        else if(request.resourceType()!=="document"){
++            request.abort();
++            // console.log( request.url());
++        }else {
++            request.continue();
++        }
++    })
++    page.on("response",response=>{
++        console.log(response);
++    })
++    await page.goto("https://pic.netbian.com/4kdongman/");
++})()
+\ No newline at end of file
+Index: Length.txt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Length.txt b/Length.txt
+new file mode 100644
+--- /dev/null	(date 1620216912291)
++++ b/Length.txt	(date 1620216912291)
+@@ -0,0 +1,1 @@
++[113,83,58,118,76,70,70,79,112,78,66,58,60,63,73,100,60,48,62,56,67,64,76,52,80,101,80,45,87,80,83,54,82,82,42,102,85,40,68,59,56,40,61,73,62,62,98,53,64,55,63,54,50,42,93,50,36,52,36,72,60,48,43,40,64,83,62,84,48,60,69,46,40,45,42,60,40,30]
+\ No newline at end of file
+Index: package.json
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/package.json b/package.json
+new file mode 100644
+--- /dev/null	(date 1620216912276)
++++ b/package.json	(date 1620216912276)
+@@ -0,0 +1,22 @@
++{
++  "name": "tsp",
++  "version": "1.0.0",
++  "description": "",
++  "main": "index.js",
++  "scripts": {
++    "test": "echo \"Error: no test specified\" && exit 1"
++  },
++  "keywords": [],
++  "author": "",
++  "license": "ISC",
++  "dependencies": {
++    "axios": "^0.21.1",
++    "pack": "^2.2.0",
++    "progress": "^2.0.3",
++    "puppeteer-core": "^9.0.0",
++    "ts-node": "^9.1.1"
++  },
++  "devDependencies": {
++    "@types/progress": "^2.0.3"
++  }
++}
+Index: tsconfig.json
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/tsconfig.json b/tsconfig.json
+new file mode 100644
+--- /dev/null	(date 1620216912260)
++++ b/tsconfig.json	(date 1620216912260)
+@@ -0,0 +1,71 @@
++{
++  "compilerOptions": {
++    /* Visit https://aka.ms/tsconfig.json to read more about this file */
++
++    /* Basic Options */
++    // "incremental": true,                         /* Enable incremental compilation */
++    "target": "ES2020",                                /* Specify ECMAScript target version: 'ES3' (default), 'ES5', 'ES2015', 'ES2016', 'ES2017', 'ES2018', 'ES2019', 'ES2020', or 'ESNEXT'. */
++    "module": "commonjs",                           /* Specify module code generation: 'none', 'commonjs', 'amd', 'system', 'umd', 'es2015', 'es2020', or 'ESNext'. */
++    // "lib": [],                                   /* Specify library files to be included in the compilation. */
++    // "allowJs": true,                             /* Allow javascript files to be compiled. */
++    // "checkJs": true,                             /* Report errors in .js files. */
++    // "jsx": "preserve",                           /* Specify JSX code generation: 'preserve', 'react-native', 'react', 'react-jsx' or 'react-jsxdev'. */
++    // "declaration": true,                         /* Generates corresponding '.d.ts' file. */
++    // "declarationMap": true,                      /* Generates a sourcemap for each corresponding '.d.ts' file. */
++    // "sourceMap": true,                           /* Generates corresponding '.map' file. */
++    // "outFile": "./",                             /* Concatenate and emit output to single file. */
++    // "outDir": "./",                              /* Redirect output structure to the directory. */
++    // "rootDir": "./",                             /* Specify the root directory of input files. Use to control the output directory structure with --outDir. */
++    // "composite": true,                           /* Enable project compilation */
++    // "tsBuildInfoFile": "./",                     /* Specify file to store incremental compilation information */
++    // "removeComments": true,                      /* Do not emit comments to output. */
++    // "noEmit": true,                              /* Do not emit outputs. */
++    // "importHelpers": true,                       /* Import emit helpers from 'tslib'. */
++    // "downlevelIteration": true,                  /* Provide full support for iterables in 'for-of', spread, and destructuring when targeting 'ES5' or 'ES3'. */
++    // "isolatedModules": true,                     /* Transpile each file as a separate module (similar to 'ts.transpileModule'). */
++
++    /* Strict Type-Checking Options */
++    "strict": true,                                 /* Enable all strict type-checking options. */
++    // "noImplicitAny": true,                       /* Raise error on expressions and declarations with an implied 'any' type. */
++    // "strictNullChecks": true,                    /* Enable strict null checks. */
++    // "strictFunctionTypes": true,                 /* Enable strict checking of function types. */
++    // "strictBindCallApply": true,                 /* Enable strict 'bind', 'call', and 'apply' methods on functions. */
++    // "strictPropertyInitialization": true,        /* Enable strict checking of property initialization in classes. */
++    // "noImplicitThis": true,                      /* Raise error on 'this' expressions with an implied 'any' type. */
++    // "alwaysStrict": true,                        /* Parse in strict mode and emit "use strict" for each source file. */
++
++    /* Additional Checks */
++    // "noUnusedLocals": true,                      /* Report errors on unused locals. */
++    // "noUnusedParameters": true,                  /* Report errors on unused parameters. */
++    // "noImplicitReturns": true,                   /* Report error when not all code paths in function return a value. */
++    // "noFallthroughCasesInSwitch": true,          /* Report errors for fallthrough cases in switch statement. */
++    // "noUncheckedIndexedAccess": true,            /* Include 'undefined' in index signature results */
++    // "noPropertyAccessFromIndexSignature": true,  /* Require undeclared properties from index signatures to use element accesses. */
++
++    /* Module Resolution Options */
++    "moduleResolution": "node",                  /* Specify module resolution strategy: 'node' (Node.js) or 'classic' (TypeScript pre-1.6). */
++    // "baseUrl": "./",                             /* Base directory to resolve non-absolute module names. */
++    // "paths": {},                                 /* A series of entries which re-map imports to lookup locations relative to the 'baseUrl'. */
++    // "rootDirs": [],                              /* List of root folders whose combined content represents the structure of the project at runtime. */
++    // "typeRoots": [],                             /* List of folders to include type definitions from. */
++    // "types": [],                                 /* Type declaration files to be included in compilation. */
++     "allowSyntheticDefaultImports": true,        /* Allow default imports from modules with no default export. This does not affect code emit, just typechecking. */
++    "esModuleInterop": true,                        /* Enables emit interoperability between CommonJS and ES Modules via creation of namespace objects for all imports. Implies 'allowSyntheticDefaultImports'. */
++    // "preserveSymlinks": true,                    /* Do not resolve the real path of symlinks. */
++    // "allowUmdGlobalAccess": true,                /* Allow accessing UMD globals from modules. */
++
++    /* Source Map Options */
++    // "sourceRoot": "",                            /* Specify the location where debugger should locate TypeScript files instead of source locations. */
++    // "mapRoot": "",                               /* Specify the location where debugger should locate map files instead of generated locations. */
++    // "inlineSourceMap": true,                     /* Emit a single file with source maps instead of having a separate file. */
++    // "inlineSources": true,                       /* Emit the source alongside the sourcemaps within a single file; requires '--inlineSourceMap' or '--sourceMap' to be set. */
++
++    /* Experimental Options */
++    // "experimentalDecorators": true,              /* Enables experimental support for ES7 decorators. */
++    // "emitDecoratorMetadata": true,               /* Enables experimental support for emitting type metadata for decorators. */
++
++    /* Advanced Options */
++    "skipLibCheck": true,                           /* Skip type checking of declaration files. */
++    "forceConsistentCasingInFileNames": true        /* Disallow inconsistently-cased references to the same file. */
++  }
++}
+Index: files404.txt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/files404.txt b/files404.txt
+new file mode 100644
+--- /dev/null	(date 1620216912229)
++++ b/files404.txt	(date 1620216912229)
+@@ -0,0 +1,1 @@
++{}
+\ No newline at end of file
+Index: p.js
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/p.js b/p.js
+new file mode 100644
+--- /dev/null	(date 1620216912213)
++++ b/p.js	(date 1620216912213)
+@@ -0,0 +1,18 @@
++const fs=require("fs")
++const path=require("path")
++let Img = JSON.parse(fs.readFileSync("Img.txt", "utf-8"));
++console.log(Img.length);
++console.log(path.dirname(Img[10]));
++console.log(path.basename(Img[10]));
++console.log(path.basename(Img[10]).match(/\d\d\w/)[0])
++let ImgUrl=path.dirname(Img[1])+"/"+path.basename(Img[1]).match(/\d\d\w/)+".jpg";
++console.log(ImgUrl);
++fs.access("13a01",err => {
++    if (err){
++        console.log(err);
++        fs.mkdirSync(path.basename(Img[0],".jpg"));
++    }else {
++        console.log("文件夹已经存在");
++    }
++})
++
+Index: ptt.js
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/ptt.js b/ptt.js
+new file mode 100644
+--- /dev/null	(date 1620216912213)
++++ b/ptt.js	(date 1620216912213)
+@@ -0,0 +1,70 @@
++const fs = require('fs');
++const axios = require('axios');
++const path = require("path");
++const ProgressBar = require("progress");
++(async () => {
++    let Img = await JSON.parse(fs.readFileSync("Img.txt", "utf-8"));
++    let Title = await JSON.parse(fs.readFileSync("Title.txt", "utf-8"));
++    let Length = await JSON.parse(fs.readFileSync("Length.txt", "utf-8"));
++    let files404 = new Map();
++    let files;
++    for (let i = 1; i < 78; i++) {
++        for (let j = 0; j < Length[i]; j++) {
++            let sign = j < 9 ? `0${j + 1}` : j + 1;
++            let ImgUrl = path.dirname(Img[i]) + "/" + path.basename(Img[i]).match(/\d\d\w/)[0] + sign + ".jpg";
++            if (j === 0) {
++                if (!(fs.existsSync(`img/${Title[i]}`))) {
++                    await fs.mkdirSync(`img/${Title[i]}`);
++                } else {
++                    console.log("文件夹已经存在");
++                }
++                files = await fs.readdirSync(`img/${Title[i]}`);//读取新创建文件夹下面的文件
++
++                if (files.length>=2) {
++                    files = files.sort((aa, bb) => {
++                        aa = aa.match(/\d{1,3}(?=\.)/)[0];
++                        bb = bb.match(/\d{1,3}(?=\.)/)[0];
++                        return parseInt(aa) - parseInt(bb);
++                    });//对文件夹下面的文件进行排序
++                }
++
++            }
++            if (files[j] !== undefined && files[j] === `${j}.jpg`) {
++                // console.log(`已经存在${j}.jpg`);
++                continue;
++            }
++            await axios.get(ImgUrl, {
++                responseType: "stream",
++                headers: {
++                    Referer: "https://www.mzitu.com/",
++                    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.85 Safari/537.36 Edg/90.0.818.49"
++                }
++            })
++                .then(async (response) => {
++                    const len = parseInt(response.data.headers['content-length'], 10);
++                    const bar = new ProgressBar(`[${i}]  ${Title[i]}/${j} [:bar] :rate/kbs :percent 剩余时间 :eta`, {
++                        complete: '=',
++                        incomplete: ' ',
++                        width: 40,
++                        total: len
++                    });
++                    response.data.on("data", chunk => {
++                        bar.tick(chunk.length);
++                    });
++                    await new Promise(resolve => {
++                        setTimeout(resolve, 600, response.data.pipe(fs.createWriteStream(`img/${Title[i]}/${j}.jpg`))
++                        );
++                    })
++                }).catch(err => {
++                    console.log("!!!!!!!!!!!!!!!!!!!!!!");
++                    console.log(`img/${Title[i]}/${j}.jpg`);
++                    console.log(`${err.config.url} `);
++                    files404.set(`${err.config.url}`, `img/${Title[i]}/${j}.jpg`);
++                    console.log("!!!!!!!!!!!!!!!!!!!!!!");
++
++                })
++        }
++    }
++    await console.log("\n" + files404 + "\n");
++
++})()
+Index: 1.js
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/1.js b/1.js
+new file mode 100644
+--- /dev/null	(date 1620216912198)
++++ b/1.js	(date 1620216912198)
+@@ -0,0 +1,11 @@
++const fs =require("fs")
++
++for (let i=0;i<10;i++) {
++    if (!(fs.existsSync(`test/${i}`))) {
++         fs.mkdir(`test/${i}`, err1 => {
++            if (err1) throw err1
++        });
++    } else {
++        console.log("文件夹已经存在");
++    }
++}
+\ No newline at end of file
+Index: Title.txt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Title.txt b/Title.txt
+new file mode 100644
+--- /dev/null	(date 1620216912198)
++++ b/Title.txt	(date 1620216912198)
+@@ -0,0 +1,1 @@
++["满足男人的撕扯欲望 性感尤物周于希被绑在床任你处置 - 性感妹子 - 妹子图","无遮无挡一目了然，顶级尤物杨晨晨肉色丝袜火辣喷血 - 性感妹子 - 妹子图","天使尤物送上门 爆乳秘书糯美子投怀送抱无人能顶 - 性感妹子 - 妹子图","高冷少妇周于希家中发浪，脱去衣服蹦出双乳 - 性感妹子 - 妹子图","腿控速看真刺激! 风骚模特阿朱电影院脱衣狂秀美腿 - 性感妹子 - 妹子图","雪白学生妹陶喜乐清甜可人 脱去内衣呈现曼妙身姿 - 性感妹子 - 妹子图","师生大战再次上演，性感妹子糯美子剧情漫画精彩无比 - 性感妹子 - 妹子图","极品眼镜娘王雨纯前凸后翘曲线优美 三点半露清晰可见 - 性感妹子 - 妹子图","您的私人管家王雨纯，无微不至满足您的所有需求 - 性感妹子 - 妹子图","绝色顶级美女陶喜乐，白皙翘臀无内肉丝扣人心扉 - 性感妹子 - 妹子图","定力不够的慎入 气质御姐芝芝Booty紧身裤完美勾勒臀部曲线 - 性感妹子 - 妹子图","芝芝女神浴室直播，脱下旗袍疯狂自摸 - 性感妹子 - 妹子图","童颜巨乳大肥臀！甜美尤物糯美子美艳风姿性感养眼 - 性感妹子 - 妹子图","老板也顶不住！气质秘书林文文美腿黑丝超短裙诱惑 - 性感妹子 - 妹子图","寂寞少妇蕾丝睡衣性感诱惑，嫩白美乳摄魂媚人 - 性感妹子 - 妹子图","满足你的尾随幻想，性感美女陆萱萱JK制服带来无尽想象 - 性感妹子 - 妹子图","温泉池里玩捆绑，和服美女朱可儿逆天身材香艳满屋 - 性感妹子 - 妹子图","性感嫩妹王梓童全裸写真，美妙的娇躯雪白又柔软 - 性感妹子 - 妹子图","这谁受得了！眼镜御姐王雨纯胸大臀圆性感爆屏 - 性感妹子 - 妹子图","万千男士的梦想！西装秘书林文文好高的颜值好美的脚 - 性感妹子 - 妹子图","性感妹子杨晨晨化身女记者 给你全面深入的采访 - 性感妹子 - 妹子图","肤白貌美胸大腿长屁股翘 女神周妍希浑身上下性感惹火 - 性感妹子 - 妹子图","当皮衣遇上渔网袜，丰满萌妹朱可儿有胸有腿可萌可御 - 性感妹子 - 妹子图","美臀女神玛鲁娜美国野外解放天性，撩裙露出堪比三级！ - 性感妹子 - 妹子图","性感模特阿朱COS地勤小妹 美到极致骚到极致 - 性感妹子 - 妹子图","豪乳肥臀寂寞诱惑 红裙少妇芝芝Booty床上人体艺术写真 - 性感妹子 - 妹子图","皮鞭与皮衣的狂野魅惑 高冷御姐杨晨晨诱人拉链等你征服 - 性感妹子 - 妹子图","一件一件脱光，气质白领Emily顾奈奈酒店上演撩人戏码 - 性感妹子 - 妹子图","多情少妇阿朱妩媚万千惹人怜，独守豪宅无人陪 - 性感妹子 - 妹子图","椰奶代言人朱可儿街头露出 完美大胸脯至少E罩杯 - 性感妹子 - 妹子图","旗袍御姐冯木木内衣写真，性感程度不言而喻 - 性感妹子 - 妹子图","完美尤物艺轩魅惑黑丝曲线毕露，美腿玉足令人欲火缠身 - 性感妹子 - 妹子图","窈窕美人陆萱萱网袜诱惑 大胸翘臀绝对迷人尤物 - 性感妹子 - 妹子图","身材火辣又甜美，清纯嫩模陆萱萱红色内衣让你大饱眼福 - 性感妹子 - 妹子图","超丰满写真美人妲己_Toxic 肥硕饱满大胸完美全露 - 性感妹子 - 妹子图","粉嫩大胸空姐陆萱萱 机场脱衣摆出各种诱人姿势 - 性感妹子 - 妹子图","高挑模特安然Maleah旗袍主题写真 婀娜身材媚态诱人 - 性感妹子 - 妹子图","秀美不失性感 邻家少妇杨紫嫣不施粉黛亦倾城 - 性感妹子 - 妹子图","性感女神杨晨晨私房写真豪放张腿，裙底春光一览无余！ - 性感妹子 - 妹子图","很骚很撩人，眼镜御姐筱慧大胆摆出后入姿势 - 性感妹子 - 妹子图","长腿女秘书周于希撅臀脱丝袜 挺起屁股超诱人 - 性感妹子 - 妹子图","女老师与学生羞羞事过程曝光 女神可樂Vicky剧情写真 - 性感妹子 - 妹子图","喝完跟你回家，秀人模特梦心月满足你对艳遇的幻想 - 性感妹子 - 妹子图","美女模特阿朱脱衣全过程，黑丝旗袍极度销魂 - 性感妹子 - 妹子图","香艳尤物周于希浴室上演激情大片 黑色内衣极致妩媚 - 性感妹子 - 妹子图","极品美女anran私密写真 销魂双乳尽显人体之美 - 性感妹子 - 妹子图","长腿少妇李梓熙性感私密照 风骚大尺度露圣光 - 性感妹子 - 妹子图","美女空姐黄楽然制服诱惑，大胸把扣子崩开 - 性感妹子 - 妹子图","女神芝芝Booty旗袍肉丝韵味无穷 美腿风光一览无遗 - 性感妹子 - 妹子图","风骚熟妇诗诗kiki超美肥臀堪称极品 - 性感妹子 - 妹子图","公园草地刺激露出！性感秘书小九月户外写真春光大泄 - 性感妹子 - 妹子图","嫩模杨晨晨空姐制服写真 肉丝诱惑让人热血沸腾 - 性感妹子 - 妹子图","后入姿势挑逗男人，美艳妖精顾奈奈深沟巨乳令人遐想 - 性感妹子 - 妹子图","邻家少女小九月丝袜美腿写真 性感吊带睡衣卧室销魂 - 清纯妹子 - 妹子图","模特陆萱萱黑色礼裙主题写真 呼之欲出的成熟女性魅力 - 性感妹子 - 妹子图","爆乳尤物妲己_Toxic脱衣诱惑，透明内内私密销魂 - 性感妹子 - 妹子图","寂寞难耐！红唇少妇Demon瑶瑶欲望满身床上等你 - 性感妹子 - 妹子图","高跟鞋美女模特陈念灵激情写真 身材前凸后翘无可挑剔 - 性感妹子 - 妹子图","红唇熟女Demon瑶瑶全裸艺术写真 纯白肉体饱满诱人 - 性感妹子 - 妹子图","销魂美女芝芝Booty隐私写真 豪放张腿无遮无挡 - 性感妹子 - 妹子图","极品秘书小热巴办公室发骚，搔首弄姿勾引总裁 - 性感妹子 - 妹子图","白嫩美女朱可儿撅臀露乳摆好姿势，情趣小内裤不言自明 - 性感妹子 - 妹子图","翘臀美女筱慧沙发上搔首弄姿 诱人姿势性感逼人 - 性感妹子 - 妹子图","热情火辣似沙漠 性感妹子萌汉药baby野外露出暴露欲望 - 性感妹子 - 妹子图","性感尤物顾奈奈床上很风骚 美腿玉足玩一年 - 性感妹子 - 妹子图","乳沟好深！女神Angela小热巴OL职业装让人心神俱醉 - 性感妹子 - 妹子图","开背毛衣魅惑至极 情欲少妇玉兔miki寂寞难耐纵欲自摸 - 性感妹子 - 妹子图","饥渴家教杨晨晨 揍裙露底诱惑宅男 - 性感妹子 - 妹子图","极品少妇Demon瑶瑶血滴子内衣床上勾引，傲人豪乳致命惹火 - 性感妹子 - 妹子图","清纯尤物林子欣警花制服夺命诱惑，黑丝短裙羞涩露底 - 性感妹子 - 妹子图","饱满的胸部天然圆润，大胸MM何嘉颖齐逼短裙床上勾魂 - 性感妹子 - 妹子图","最性感不是黑丝而是肉色丝袜，小姐姐的腿实在是太美了 - 性感妹子 - 妹子图","丰腴有致的巨乳熟妇，胡润曦脱衣露奶眼神勾人 - 性感妹子 - 妹子图","朦胧唯美却充满诱惑 温柔小女人Eileen爱琳娇羞又性感 - 性感妹子 - 妹子图","硕大巨胸大到捧不住，白嫩美女朱可儿极品猛乳让人垂涎 - 性感妹子 - 妹子图","大奶尤物杉原杏璃香艳写真，浑圆巨乳宅男把持不住 - 日本妹子 - 妹子图","微胖女神Eileen爱琳女仆睡衣尽显万种风情 - 性感妹子 - 妹子图","日本少妇真骚浪 迷离眼神诉说欲望 - 日本妹子 - 妹子图"]
+\ No newline at end of file
+Index: test.ts
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/test.ts b/test.ts
+new file mode 100644
+--- /dev/null	(date 1620216912182)
++++ b/test.ts	(date 1620216912182)
+@@ -0,0 +1,34 @@
++import {ElementHandle} from 'puppeteer-core'
++import fs from "fs"
++import puppeteer from "puppeteer-core";
++console.time("1");
++(async () => {
++    const browser:puppeteer.Browser = await puppeteer.launch({
++        executablePath: "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe",
++        headless: false,
++        slowMo: 0,
++        defaultViewport: {
++            width: 1280,
++            height: 720
++        }
++    });
++    const page: puppeteer.Page = await browser.newPage();
++    await page.goto("https://www.douban.com/doulist/45004834/");
++    for (let i = 0; i < 4; i++) {
++        await page.waitForSelector("div > div.bd.doulist-subject");
++        let textElement: string[] = await page.$$eval("div > div.bd.doulist-subject",
++            (x) =>
++                x.map((y) => (y as HTMLElement).innerText + "\n-------------------------")
++        );
++        let pageDown: ElementHandle | null = await page.$(".thispage+a");
++        console.log(textElement[0]);
++        fs.writeFile("1.txt", textElement.toString(), {flag: "a"}, (async err => {
++            if (err) throw err;
++        }));
++        if (pageDown != null) await pageDown.click();
++        else {
++            await browser.close();
++            console.timeEnd("1");
++        }
++    }
++})()
+\ No newline at end of file
+Index: pt.js
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/pt.js b/pt.js
+new file mode 100644
+--- /dev/null	(date 1620216912182)
++++ b/pt.js	(date 1620216912182)
+@@ -0,0 +1,15 @@
++const fs=require("fs");
++const axios=require("axios");
++(async ()=> {
++    let Length = JSON.parse(fs.readFileSync("Length.txt", "utf-8"));
++    let Title = JSON.parse(fs.readFileSync("Title.txt", "utf-8"));
++    let Img = JSON.parse(fs.readFileSync("Img.txt", "utf-8"));
++    for (let i = 0; i < await Length.length; i++) {
++        await fs.mkdirSync(`./img/${await Title[i]}`);
++        for (let j = 0; j < Length[i]; j++) {
++axios.get(`${await Img[0]}`)
++
++        }
++
++    }
++})()
+Index: testAxios.ts
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/testAxios.ts b/testAxios.ts
+new file mode 100644
+--- /dev/null	(date 1620216912166)
++++ b/testAxios.ts	(date 1620216912166)
+@@ -0,0 +1,23 @@
++import progressBar from "progress";
++import axios from "axios";
++import fs from "fs";
++axios.get("https://imgpc.iimzt.com/2020/03/13a01.jpg",{
++    responseType:"stream",
++    headers:{
++        "Referer": "https://www.mzitu.com/",
++        // "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.85 Safari/537.36 Edg/90.0.818.49"
++    }
++}).then(response=>{
++    const len = parseInt(response.data.headers['content-length'], 10);
++    const bar = new progressBar('  downloading [:bar] :rate/kbs :percent 剩余时间 :eta', {
++        complete: '=',
++        incomplete: ' ',
++        width: 40,
++        total: len
++    });
++    response.data.on("data", (chunk:string) => {
++        bar.tick(chunk.length);
++        // console.log(typeof chunk);
++    });
++    response.data.pipe(fs.createWriteStream("aaa1.jpg"));
++    })
+\ No newline at end of file
+Index: progressBar.ts
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/progressBar.ts b/progressBar.ts
+new file mode 100644
+--- /dev/null	(date 1620216912120)
++++ b/progressBar.ts	(date 1620216912120)
+@@ -0,0 +1,58 @@
++import fs from "fs";
++import progressStream from "progress-stream";
++import path from "path";
++import fetch from "node-fetch";
++//下载 的文件 地址
++let fileURL = "https://nodejs.org/dist/v12.18.3/node-v12.18.3-x64.msi";
++//下载保存的文件路径
++let fileSavePath = path.join(__dirname, path.basename(fileURL));
++//缓存文件路径
++let tmpFileSavePath = fileSavePath + ".tmp";
++//创建写入流
++const fileStream = fs.createWriteStream(tmpFileSavePath).on('error', function (e) {
++    console.error('error==>', e)
++}).on('ready', function () {
++    console.log("开始下载:", fileURL);
++}).on('finish', function () {
++    //下载完成后重命名文件
++    fs.renameSync(tmpFileSavePath, fileSavePath);
++    console.log('文件下载完成:', fileSavePath);
++});
++//请求文件
++fetch(fileURL, {
++    method: 'GET',
++    headers: { 'Content-Type': 'application/octet-stream' },
++    // timeout: 100,
++}).then(res => {
++    //获取请求头中的文件大小数据
++    let fsize = res.headers.get("content-length");
++    //创建进度
++    let str = progressStream({
++        length: fsize,
++        time: 100 /* ms */
++    });
++    // 下载进度
++    str.on('progress', function (progressData) {
++        //不换行输出
++        let percentage = Math.round(progressData.percentage) + '%';
++        console.log(percentage);
++        // process.stdout.write('\033[2J'+);
++        // console.log(progress);
++        /*
++        {
++            percentage: 9.05,
++            transferred: 949624,
++            length: 10485760,
++            remaining: 9536136,
++            eta: 42,
++            runtime: 3,
++            delta: 295396,
++            speed: 949624
++        }
++        */
++    });
++    res.body.pipe(str).pipe(fileStream);
++}).catch(e => {
++    //自定义异常处理
++    console.log(e);
++});
+\ No newline at end of file
+Index: continueP.ts
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/continueP.ts b/continueP.ts
+new file mode 100644
+--- /dev/null	(date 1620216912104)
++++ b/continueP.ts	(date 1620216912104)
+@@ -0,0 +1,12 @@
++import puppeteer,
++{Browser, Page} from "puppeteer-core";
++import fs from "fs";
++(async ()=>{
++    const browse: Browser= await puppeteer.connect({
++        browserWSEndpoint: "ws://localhost:9222/devtools/browser/8cfb2d5e-71c8-438a-89c2-fd29d79058cc"
++    });
++    const page: Page = await browse.newPage();
++    await page.goto("https://www.baidu.com");
++
++
++})()
+Index: crawlMeizitu.ts
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/crawlMeizitu.ts b/crawlMeizitu.ts
+new file mode 100644
+--- /dev/null	(date 1620216912104)
++++ b/crawlMeizitu.ts	(date 1620216912104)
+@@ -0,0 +1,48 @@
++import puppeteer, {HTTPResponse, Page} from "puppeteer-core"
++import axios from "axios";
++import progressBar from "progress"
++import fs from "fs";
++
++(async () => {
++    const data: string = await fs.readFileSync("launch.json", "utf-8");
++    const browser: puppeteer.Browser = await puppeteer.launch(JSON.parse(data));
++    let pageArray: Promise<Page>[] = [];
++    let grabImg: Array<string[]> = [];
++    let pageArray01: Page[];//解决期约后的page
++    let Img: Array<string> = new Array<string>();
++    let Title: Array<string> = new Array<string>();
++    let Length: Array<number> = new Array<number>();
++    for (let i = 0; i < 4; i++) {
++        pageArray[i] = browser.newPage();
++        (await pageArray[i]).goto(`https://www.mzitu.com/hot/page/${i + 1}/`);
++    }
++    pageArray01 = await Promise.all(pageArray);
++    for (let i = 0; i < 4; i++) {
++        grabImg[i] = await pageArray01[i].$$eval("#pins>li>a", (x: Element[]) =>
++            x.map((y: Element) => (y as HTMLAnchorElement).href));
++    }
++    await console.log("---------------------")
++    console.log(grabImg);
++    for (let i = 0; i < 4; i++) {
++        new Promise(async () => {
++            for (const grabImgElement of grabImg[i]) {
++                await pageArray01[i].goto(grabImgElement);
++                let str: string = await pageArray01[i].$eval(("body > div.main > div.content > div.main-image > p > a > img"),
++                    (x: Element): string => (x as HTMLImageElement).src);
++                let tit: string = await pageArray01[i].$eval("head > title",
++                    (x: Element) => (x as HTMLElement).innerText);
++                let len: number = await pageArray01[i].$eval("body > div.main > div.content > div.pagenavi > a:nth-child(7) > span",
++                    x => parseInt((x as HTMLElement).innerText))
++                await Img.push(str);
++                await Title.push(tit);
++                await Length.push(len);
++            }
++        })
++    }
++    await console.log("-------------");
++    // await fs.writeFileSync("Img.txt",JSON.stringify(Img),"utf-8");
++    // await fs.writeFileSync("Title.txt",JSON.stringify(Title),"utf-8");
++    // await fs.writeFileSync("Length.txt",JSON.stringify(Length),"utf-8");
++
++
++})()
+\ No newline at end of file
+Index: launch.json
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/launch.json b/launch.json
+new file mode 100644
+--- /dev/null	(date 1620216912088)
++++ b/launch.json	(date 1620216912088)
+@@ -0,0 +1,10 @@
++{
++  "executablePath": "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe",
++  "headless": false,
++  "slowMo": 10,
++  "defaultViewport": {
++    "width": 1280,
++    "height": 1300
++  },
++  "devtools":false
++}
+\ No newline at end of file
+Index: Img.txt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Img.txt b/Img.txt
+new file mode 100644
+--- /dev/null	(date 1620216912088)
++++ b/Img.txt	(date 1620216912088)
+@@ -0,0 +1,1 @@
++["https://imgpc.iimzt.com/2020/03/13a01.jpg","https://imgpc.iimzt.com/2020/02/05a01.jpg","https://imgpc.iimzt.com/2020/03/11a01.jpg","https://imgpc.iimzt.com/2020/03/16a01.jpg","https://imgpc.iimzt.com/2020/03/06a01.jpg","https://imgpc.iimzt.com/2019/11/12b01.jpg","https://imgpc.iimzt.com/2020/03/07a01.jpg","https://imgpc.iimzt.com/2020/02/17a01.jpg","https://imgpc.iimzt.com/2020/02/28a01.jpg","https://imgpc.iimzt.com/2020/02/15a01.jpg","https://imgpc.iimzt.com/2019/09/28c01.jpg","https://imgpc.iimzt.com/2020/02/11a01.jpg","https://imgpc.iimzt.com/2019/09/26b01.jpg","https://imgpc.iimzt.com/2020/01/24a01.jpg","https://imgpc.iimzt.com/2020/02/13a02.jpg","https://imgpc.iimzt.com/2020/04/10a01.jpg","https://imgpc.iimzt.com/2020/02/20a01.jpg","https://imgpc.iimzt.com/2020/04/21b01.jpg","https://imgpc.iimzt.com/2020/03/27b01.jpg","https://imgpc.iimzt.com/2020/03/10a01.jpg","https://imgpc.iimzt.com/2020/03/12a01.jpg","https://imgpc.iimzt.com/2020/03/29b01.jpg","https://imgpc.iimzt.com/2020/03/04a01.jpg","https://imgpc.iimzt.com/2019/11/22c01.jpg","https://imgpc.iimzt.com/2020/02/12a01.jpg","https://imgpc.iimzt.com/2020/04/15a01.jpg","https://imgpc.iimzt.com/2020/03/20a01.jpg","https://imgpc.iimzt.com/2019/09/28h01.jpg","https://imgpc.iimzt.com/2019/09/24a01.jpg","https://imgpc.iimzt.com/2020/04/24b01.jpg","https://imgpc.iimzt.com/2020/02/22a01.jpg","https://imgpc.iimzt.com/2019/11/15b01.jpg","https://imgpc.iimzt.com/2020/04/23a01.jpg","https://imgpc.iimzt.com/2020/01/28a01.jpg","https://imgpc.iimzt.com/2020/04/29a01.jpg","https://imgpc.iimzt.com/2020/03/23b01.jpg","https://imgpc.iimzt.com/2020/11/21a01.jpg","https://imgpc.iimzt.com/2020/02/25d01.jpg","https://imgpc.iimzt.com/2019/09/20a01.jpg","https://imgpc.iimzt.com/2020/02/10a01.jpg","https://imgpc.iimzt.com/2019/09/27a01.jpg","https://imgpc.iimzt.com/2020/03/05a01.jpg","https://imgpc.iimzt.com/2020/04/17b01.jpg","https://imgpc.iimzt.com/2020/04/23b01.jpg","https://imgpc.iimzt.com/2020/01/31a01.jpg","https://imgpc.iimzt.com/2020/03/15a01.jpg","https://imgpc.iimzt.com/2020/04/28a01.jpg","https://imgpc.iimzt.com/2020/05/01a01.jpg","https://imgpc.iimzt.com/2019/11/15a01.jpg","https://imgpc.iimzt.com/2020/05/03a01.jpg","https://imgpc.iimzt.com/2019/11/11a01.jpg","https://imgpc.iimzt.com/2020/11/23a01.jpg","https://imgpc.iimzt.com/2020/01/26b01.jpg","https://imgpc.iimzt.com/2020/01/30a01.jpg","https://imgpc.iimzt.com/2020/04/27b01.jpg","https://imgpc.iimzt.com/2020/04/14b01.jpg","https://imgpc.iimzt.com/2019/09/04b01.jpg","https://imgpc.iimzt.com/2020/04/21a01.jpg","https://imgpc.iimzt.com/2019/11/21a01.jpg","https://imgpc.iimzt.com/2020/03/22a01.jpg","https://imgpc.iimzt.com/2020/05/01c01.jpg","https://imgpc.iimzt.com/2019/09/28e01.jpg","https://imgpc.iimzt.com/2019/09/21a01.jpg","https://imgpc.iimzt.com/2019/09/25a01.jpg","https://imgpc.iimzt.com/2019/09/28d01.jpg","https://imgpc.iimzt.com/2020/04/24a01.jpg","https://imgpc.iimzt.com/2020/04/07a01.jpg","https://imgpc.iimzt.com/2020/11/20a01.jpg","https://imgpc.iimzt.com/2019/09/15a01.jpg","https://imgpc.iimzt.com/2020/03/27a01.jpg","https://imgpc.iimzt.com/2020/04/18b01.jpg","https://imgpc.iimzt.com/2020/04/28b02.jpg","https://imgpc.iimzt.com/2020/01/27a01.jpg","https://imgpc.iimzt.com/2019/09/28a01.jpg","https://imgpc.iimzt.com/2019/11/16a01.jpg","https://imgpc.iimzt.com/2020/04/29d01.jpg","https://imgpc.iimzt.com/2019/09/07a01.jpg","https://imgpc.iimzt.com/2020/03/23e01.jpg"]
+\ No newline at end of file
+Index: test01.ts
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/test01.ts b/test01.ts
+new file mode 100644
+--- /dev/null	(date 1620216912057)
++++ b/test01.ts	(date 1620216912057)
+@@ -0,0 +1,43 @@
++import fs from "fs";
++import puppeteer, {Page} from "puppeteer-core";
++
++(async () => {
++    const data: string = await fs.readFileSync("launch.json", "utf-8");
++    const browser: puppeteer.Browser = await puppeteer.launch(JSON.parse(data));
++    let pageC: Promise<Page>[] = [];
++    let pageArray: Promise<Page[]>;
++    let pageArrayED: Page[]
++    let finish:Promise<string>[]=[];
++    for (let i = 0; i < 3; i++) {
++        pageC[i] = browser.newPage();
++    }
++    await Promise.all(pageC)
++    pageArray = browser.pages();
++    pageArrayED = await pageArray
++    for (const page of pageArrayED) {
++        await page.setRequestInterception(true);
++        page.on("request",request=>{
++            if (request.resourceType()!=="document"){
++                request.abort();
++            }else {
++                request.continue();
++            }
++        })
++    }
++    console.log(pageArrayED.length);
++    for (let i = 0; i < 4; i++) {
++    finish[i]=new Promise(async (resolve) => {
++        for (let j = 0; j < 10; j++) {
++            await pageArrayED[i].goto(`https://www.baidu.com/s?wd=${j}`);
++            if (j==9) {
++                resolve(`第${i+1}个页面`);
++            }
++        }
++    })
++    }
++    await console.log("------");
++    Promise.race(finish).then(x=>console.log("最先加载完毕的页面为"+x));
++    Promise.all(finish).then(()=>{
++        browser.close();
++    })
++})()
+\ No newline at end of file
+Index: package-lock.json
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/package-lock.json b/package-lock.json
+new file mode 100644
+--- /dev/null	(date 1620216912057)
++++ b/package-lock.json	(date 1620216912057)
+@@ -0,0 +1,1163 @@
++{
++  "name": "tsp",
++  "version": "1.0.0",
++  "lockfileVersion": 2,
++  "requires": true,
++  "packages": {
++    "": {
++      "version": "1.0.0",
++      "license": "ISC",
++      "dependencies": {
++        "axios": "^0.21.1",
++        "pack": "^2.2.0",
++        "progress": "^2.0.3",
++        "puppeteer-core": "^9.0.0",
++        "ts-node": "^9.1.1"
++      },
++      "devDependencies": {
++        "@types/progress": "^2.0.3"
++      }
++    },
++    "node_modules/@types/node": {
++      "version": "14.14.41",
++      "resolved": "https://registry.npm.taobao.org/@types/node/download/@types/node-14.14.41.tgz?cache=0&sync_timestamp=1618543947232&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2F%40types%2Fnode%2Fdownload%2F%40types%2Fnode-14.14.41.tgz",
++      "integrity": "sha1-0Lk52Uwde9U9BIJK9F8RObjEVhU=",
++      "devOptional": true
++    },
++    "node_modules/@types/progress": {
++      "version": "2.0.3",
++      "resolved": "https://registry.nlark.com/@types/progress/download/@types/progress-2.0.3.tgz",
++      "integrity": "sha1-fMvZxtTWATGRJsRp5ztbuQ38jMw=",
++      "dev": true,
++      "dependencies": {
++        "@types/node": "*"
++      }
++    },
++    "node_modules/@types/yauzl": {
++      "version": "2.9.1",
++      "resolved": "https://registry.npm.taobao.org/@types/yauzl/download/@types/yauzl-2.9.1.tgz",
++      "integrity": "sha1-0Q9p+fUi7vPPmOMK+2hKHh7JI68=",
++      "optional": true,
++      "dependencies": {
++        "@types/node": "*"
++      }
++    },
++    "node_modules/agent-base": {
++      "version": "6.0.2",
++      "resolved": "https://registry.npm.taobao.org/agent-base/download/agent-base-6.0.2.tgz",
++      "integrity": "sha1-Sf/1hXfP7j83F2/qtMIuAPhtf3c=",
++      "dependencies": {
++        "debug": "4"
++      },
++      "engines": {
++        "node": ">= 6.0.0"
++      }
++    },
++    "node_modules/arg": {
++      "version": "4.1.3",
++      "resolved": "https://registry.npm.taobao.org/arg/download/arg-4.1.3.tgz",
++      "integrity": "sha1-Jp/HrVuOQstjyJbVZmAXJhwUQIk="
++    },
++    "node_modules/axios": {
++      "version": "0.21.1",
++      "resolved": "https://registry.npm.taobao.org/axios/download/axios-0.21.1.tgz",
++      "integrity": "sha1-IlY0gZYvTWvemnbVFu8OXTwJsrg=",
++      "dependencies": {
++        "follow-redirects": "^1.10.0"
++      }
++    },
++    "node_modules/balanced-match": {
++      "version": "1.0.2",
++      "resolved": "https://registry.npm.taobao.org/balanced-match/download/balanced-match-1.0.2.tgz?cache=0&sync_timestamp=1617714298273&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fbalanced-match%2Fdownload%2Fbalanced-match-1.0.2.tgz",
++      "integrity": "sha1-6D46fj8wCzTLnYf2FfoMvzV2kO4="
++    },
++    "node_modules/base64-js": {
++      "version": "1.5.1",
++      "resolved": "https://registry.npm.taobao.org/base64-js/download/base64-js-1.5.1.tgz",
++      "integrity": "sha1-GxtEAWClv3rUC2UPCVljSBkDkwo="
++    },
++    "node_modules/bl": {
++      "version": "4.1.0",
++      "resolved": "https://registry.npm.taobao.org/bl/download/bl-4.1.0.tgz",
++      "integrity": "sha1-RRU1JkGCvsL7vIOmKrmM8R2fezo=",
++      "dependencies": {
++        "buffer": "^5.5.0",
++        "inherits": "^2.0.4",
++        "readable-stream": "^3.4.0"
++      }
++    },
++    "node_modules/brace-expansion": {
++      "version": "1.1.11",
++      "resolved": "https://registry.npm.taobao.org/brace-expansion/download/brace-expansion-1.1.11.tgz?cache=0&sync_timestamp=1614010713935&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fbrace-expansion%2Fdownload%2Fbrace-expansion-1.1.11.tgz",
++      "integrity": "sha1-PH/L9SnYcibz0vUrlm/1Jx60Qd0=",
++      "dependencies": {
++        "balanced-match": "^1.0.0",
++        "concat-map": "0.0.1"
++      }
++    },
++    "node_modules/buffer": {
++      "version": "5.7.1",
++      "resolved": "https://registry.npm.taobao.org/buffer/download/buffer-5.7.1.tgz?cache=0&sync_timestamp=1606098189689&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fbuffer%2Fdownload%2Fbuffer-5.7.1.tgz",
++      "integrity": "sha1-umLnwTEzBTWCGXFghRqPZI6Z7tA=",
++      "dependencies": {
++        "base64-js": "^1.3.1",
++        "ieee754": "^1.1.13"
++      }
++    },
++    "node_modules/buffer-crc32": {
++      "version": "0.2.13",
++      "resolved": "https://registry.npm.taobao.org/buffer-crc32/download/buffer-crc32-0.2.13.tgz",
++      "integrity": "sha1-DTM+PwDqxQqhRUq9MO+MKl2ackI=",
++      "engines": {
++        "node": "*"
++      }
++    },
++    "node_modules/buffer-from": {
++      "version": "1.1.1",
++      "resolved": "https://registry.npm.taobao.org/buffer-from/download/buffer-from-1.1.1.tgz",
++      "integrity": "sha1-MnE7wCj3XAL9txDXx7zsHyxgcO8="
++    },
++    "node_modules/bufferutil": {
++      "version": "4.0.3",
++      "resolved": "https://registry.npm.taobao.org/bufferutil/download/bufferutil-4.0.3.tgz",
++      "integrity": "sha1-ZnJLdWvtI818KMTTBteZT5lDzGs=",
++      "hasInstallScript": true,
++      "peer": true,
++      "dependencies": {
++        "node-gyp-build": "^4.2.0"
++      }
++    },
++    "node_modules/chownr": {
++      "version": "1.1.4",
++      "resolved": "https://registry.npm.taobao.org/chownr/download/chownr-1.1.4.tgz",
++      "integrity": "sha1-b8nXtC0ypYNZYzdmbn0ICE2izGs="
++    },
++    "node_modules/concat-map": {
++      "version": "0.0.1",
++      "resolved": "https://registry.npm.taobao.org/concat-map/download/concat-map-0.0.1.tgz",
++      "integrity": "sha1-2Klr13/Wjfd5OnMDajug1UBdR3s="
++    },
++    "node_modules/create-require": {
++      "version": "1.1.1",
++      "resolved": "https://registry.npm.taobao.org/create-require/download/create-require-1.1.1.tgz",
++      "integrity": "sha1-wdfo8eX2z8n/ZfnNNS03NIdWwzM="
++    },
++    "node_modules/debug": {
++      "version": "4.3.1",
++      "resolved": "https://registry.npm.taobao.org/debug/download/debug-4.3.1.tgz?cache=0&sync_timestamp=1607566548985&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fdebug%2Fdownload%2Fdebug-4.3.1.tgz",
++      "integrity": "sha1-8NIpxQXgxtjEmsVT0bE9wYP2su4=",
++      "dependencies": {
++        "ms": "2.1.2"
++      },
++      "engines": {
++        "node": ">=6.0"
++      }
++    },
++    "node_modules/devtools-protocol": {
++      "version": "0.0.869402",
++      "resolved": "https://registry.nlark.com/devtools-protocol/download/devtools-protocol-0.0.869402.tgz?cache=0&other_urls=https%3A%2F%2Fregistry.nlark.com%2Fdevtools-protocol%2Fdownload%2Fdevtools-protocol-0.0.869402.tgz",
++      "integrity": "sha1-A63nAXYXQuQ65N5dwYi82A8VbY0="
++    },
++    "node_modules/diff": {
++      "version": "4.0.2",
++      "resolved": "https://registry.npm.taobao.org/diff/download/diff-4.0.2.tgz",
++      "integrity": "sha1-YPOuy4nV+uUgwRqhnvwruYKq3n0=",
++      "engines": {
++        "node": ">=0.3.1"
++      }
++    },
++    "node_modules/end-of-stream": {
++      "version": "1.4.4",
++      "resolved": "https://registry.npm.taobao.org/end-of-stream/download/end-of-stream-1.4.4.tgz",
++      "integrity": "sha1-WuZKX0UFe682JuwU2gyl5LJDHrA=",
++      "dependencies": {
++        "once": "^1.4.0"
++      }
++    },
++    "node_modules/extract-zip": {
++      "version": "2.0.1",
++      "resolved": "https://registry.npm.taobao.org/extract-zip/download/extract-zip-2.0.1.tgz",
++      "integrity": "sha1-Zj3KVv5G34kNXxMe9KBtIruLoTo=",
++      "dependencies": {
++        "debug": "^4.1.1",
++        "get-stream": "^5.1.0",
++        "yauzl": "^2.10.0"
++      },
++      "bin": {
++        "extract-zip": "cli.js"
++      },
++      "engines": {
++        "node": ">= 10.17.0"
++      },
++      "optionalDependencies": {
++        "@types/yauzl": "^2.9.1"
++      }
++    },
++    "node_modules/fd-slicer": {
++      "version": "1.1.0",
++      "resolved": "https://registry.npm.taobao.org/fd-slicer/download/fd-slicer-1.1.0.tgz",
++      "integrity": "sha1-JcfInLH5B3+IkbvmHY85Dq4lbx4=",
++      "dependencies": {
++        "pend": "~1.2.0"
++      }
++    },
++    "node_modules/find-up": {
++      "version": "4.1.0",
++      "resolved": "https://registry.npm.taobao.org/find-up/download/find-up-4.1.0.tgz",
++      "integrity": "sha1-l6/n1s3AvFkoWEt8jXsW6KmqXRk=",
++      "dependencies": {
++        "locate-path": "^5.0.0",
++        "path-exists": "^4.0.0"
++      },
++      "engines": {
++        "node": ">=8"
++      }
++    },
++    "node_modules/follow-redirects": {
++      "version": "1.14.0",
++      "resolved": "https://registry.nlark.com/follow-redirects/download/follow-redirects-1.14.0.tgz?cache=0&sync_timestamp=1619369154979&other_urls=https%3A%2F%2Fregistry.nlark.com%2Ffollow-redirects%2Fdownload%2Ffollow-redirects-1.14.0.tgz",
++      "integrity": "sha1-9dJg+VxfjBBYlEkf7uXciZO0Av4=",
++      "engines": {
++        "node": ">=4.0"
++      }
++    },
++    "node_modules/fs-constants": {
++      "version": "1.0.0",
++      "resolved": "https://registry.npm.taobao.org/fs-constants/download/fs-constants-1.0.0.tgz",
++      "integrity": "sha1-a+Dem+mYzhavivwkSXue6bfM2a0="
++    },
++    "node_modules/fs.realpath": {
++      "version": "1.0.0",
++      "resolved": "https://registry.npm.taobao.org/fs.realpath/download/fs.realpath-1.0.0.tgz",
++      "integrity": "sha1-FQStJSMVjKpA20onh8sBQRmU6k8="
++    },
++    "node_modules/get-stream": {
++      "version": "5.2.0",
++      "resolved": "https://registry.npm.taobao.org/get-stream/download/get-stream-5.2.0.tgz?cache=0&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fget-stream%2Fdownload%2Fget-stream-5.2.0.tgz",
++      "integrity": "sha1-SWaheV7lrOZecGxLe+txJX1uItM=",
++      "dependencies": {
++        "pump": "^3.0.0"
++      },
++      "engines": {
++        "node": ">=8"
++      }
++    },
++    "node_modules/glob": {
++      "version": "7.1.6",
++      "resolved": "https://registry.npm.taobao.org/glob/download/glob-7.1.6.tgz",
++      "integrity": "sha1-FB8zuBp8JJLhJVlDB0gMRmeSeKY=",
++      "dependencies": {
++        "fs.realpath": "^1.0.0",
++        "inflight": "^1.0.4",
++        "inherits": "2",
++        "minimatch": "^3.0.4",
++        "once": "^1.3.0",
++        "path-is-absolute": "^1.0.0"
++      },
++      "engines": {
++        "node": "*"
++      }
++    },
++    "node_modules/https-proxy-agent": {
++      "version": "5.0.0",
++      "resolved": "https://registry.npm.taobao.org/https-proxy-agent/download/https-proxy-agent-5.0.0.tgz",
++      "integrity": "sha1-4qkFQqu2inYuCghQ9sntrf2FBrI=",
++      "dependencies": {
++        "agent-base": "6",
++        "debug": "4"
++      },
++      "engines": {
++        "node": ">= 6"
++      }
++    },
++    "node_modules/ieee754": {
++      "version": "1.2.1",
++      "resolved": "https://registry.npm.taobao.org/ieee754/download/ieee754-1.2.1.tgz",
++      "integrity": "sha1-jrehCmP/8l0VpXsAFYbRd9Gw01I="
++    },
++    "node_modules/inflight": {
++      "version": "1.0.6",
++      "resolved": "https://registry.npm.taobao.org/inflight/download/inflight-1.0.6.tgz",
++      "integrity": "sha1-Sb1jMdfQLQwJvJEKEHW6gWW1bfk=",
++      "dependencies": {
++        "once": "^1.3.0",
++        "wrappy": "1"
++      }
++    },
++    "node_modules/inherits": {
++      "version": "2.0.4",
++      "resolved": "https://registry.npm.taobao.org/inherits/download/inherits-2.0.4.tgz",
++      "integrity": "sha1-D6LGT5MpF8NDOg3tVTY6rjdBa3w="
++    },
++    "node_modules/locate-path": {
++      "version": "5.0.0",
++      "resolved": "https://registry.npm.taobao.org/locate-path/download/locate-path-5.0.0.tgz",
++      "integrity": "sha1-Gvujlq/WdqbUJQTQpno6frn2KqA=",
++      "dependencies": {
++        "p-locate": "^4.1.0"
++      },
++      "engines": {
++        "node": ">=8"
++      }
++    },
++    "node_modules/make-error": {
++      "version": "1.3.6",
++      "resolved": "https://registry.npm.taobao.org/make-error/download/make-error-1.3.6.tgz",
++      "integrity": "sha1-LrLjfqm2fEiR9oShOUeZr0hM96I="
++    },
++    "node_modules/minimatch": {
++      "version": "3.0.4",
++      "resolved": "https://registry.npm.taobao.org/minimatch/download/minimatch-3.0.4.tgz",
++      "integrity": "sha1-UWbihkV/AzBgZL5Ul+jbsMPTIIM=",
++      "dependencies": {
++        "brace-expansion": "^1.1.7"
++      },
++      "engines": {
++        "node": "*"
++      }
++    },
++    "node_modules/mkdirp-classic": {
++      "version": "0.5.3",
++      "resolved": "https://registry.npm.taobao.org/mkdirp-classic/download/mkdirp-classic-0.5.3.tgz",
++      "integrity": "sha1-+hDJEVzG2IZb4iG6R+6b7XhgERM="
++    },
++    "node_modules/ms": {
++      "version": "2.1.2",
++      "resolved": "https://registry.npm.taobao.org/ms/download/ms-2.1.2.tgz?cache=0&sync_timestamp=1607433912031&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fms%2Fdownload%2Fms-2.1.2.tgz",
++      "integrity": "sha1-0J0fNXtEP0kzgqjrPM0YOHKuYAk="
++    },
++    "node_modules/node-fetch": {
++      "version": "2.6.1",
++      "resolved": "https://registry.npm.taobao.org/node-fetch/download/node-fetch-2.6.1.tgz",
++      "integrity": "sha1-BFvTI2Mfdu0uK1VXM5RBa2OaAFI=",
++      "engines": {
++        "node": "4.x || >=6.0.0"
++      }
++    },
++    "node_modules/node-gyp-build": {
++      "version": "4.2.3",
++      "resolved": "https://registry.npm.taobao.org/node-gyp-build/download/node-gyp-build-4.2.3.tgz",
++      "integrity": "sha1-zmJ3+FODX3GIKe+0fbIPPk2cRzk=",
++      "peer": true,
++      "bin": {
++        "node-gyp-build": "bin.js",
++        "node-gyp-build-optional": "optional.js",
++        "node-gyp-build-test": "build-test.js"
++      }
++    },
++    "node_modules/once": {
++      "version": "1.4.0",
++      "resolved": "https://registry.npm.taobao.org/once/download/once-1.4.0.tgz",
++      "integrity": "sha1-WDsap3WWHUsROsF9nFC6753Xa9E=",
++      "dependencies": {
++        "wrappy": "1"
++      }
++    },
++    "node_modules/p-limit": {
++      "version": "2.3.0",
++      "resolved": "https://registry.npm.taobao.org/p-limit/download/p-limit-2.3.0.tgz?cache=0&sync_timestamp=1606288370125&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fp-limit%2Fdownload%2Fp-limit-2.3.0.tgz",
++      "integrity": "sha1-PdM8ZHohT9//2DWTPrCG2g3CHbE=",
++      "dependencies": {
++        "p-try": "^2.0.0"
++      },
++      "engines": {
++        "node": ">=6"
++      }
++    },
++    "node_modules/p-locate": {
++      "version": "4.1.0",
++      "resolved": "https://registry.npm.taobao.org/p-locate/download/p-locate-4.1.0.tgz",
++      "integrity": "sha1-o0KLtwiLOmApL2aRkni3wpetTwc=",
++      "dependencies": {
++        "p-limit": "^2.2.0"
++      },
++      "engines": {
++        "node": ">=8"
++      }
++    },
++    "node_modules/p-try": {
++      "version": "2.2.0",
++      "resolved": "https://registry.npm.taobao.org/p-try/download/p-try-2.2.0.tgz",
++      "integrity": "sha1-yyhoVA4xPWHeWPr741zpAE1VQOY=",
++      "engines": {
++        "node": ">=6"
++      }
++    },
++    "node_modules/pack": {
++      "version": "2.2.0",
++      "resolved": "https://registry.npm.taobao.org/pack/download/pack-2.2.0.tgz",
++      "integrity": "sha1-isTjFrdxZGpZ8uejX52y3xwU4nQ="
++    },
++    "node_modules/path-exists": {
++      "version": "4.0.0",
++      "resolved": "https://registry.npm.taobao.org/path-exists/download/path-exists-4.0.0.tgz",
++      "integrity": "sha1-UTvb4tO5XXdi6METfvoZXGxhtbM=",
++      "engines": {
++        "node": ">=8"
++      }
++    },
++    "node_modules/path-is-absolute": {
++      "version": "1.0.1",
++      "resolved": "https://registry.npm.taobao.org/path-is-absolute/download/path-is-absolute-1.0.1.tgz",
++      "integrity": "sha1-F0uSaHNVNP+8es5r9TpanhtcX18=",
++      "engines": {
++        "node": ">=0.10.0"
++      }
++    },
++    "node_modules/pend": {
++      "version": "1.2.0",
++      "resolved": "https://registry.npm.taobao.org/pend/download/pend-1.2.0.tgz",
++      "integrity": "sha1-elfrVQpng/kRUzH89GY9XI4AelA="
++    },
++    "node_modules/pkg-dir": {
++      "version": "4.2.0",
++      "resolved": "https://registry.npm.taobao.org/pkg-dir/download/pkg-dir-4.2.0.tgz",
++      "integrity": "sha1-8JkTPfft5CLoHR2ESCcO6z5CYfM=",
++      "dependencies": {
++        "find-up": "^4.0.0"
++      },
++      "engines": {
++        "node": ">=8"
++      }
++    },
++    "node_modules/progress": {
++      "version": "2.0.3",
++      "resolved": "https://registry.npm.taobao.org/progress/download/progress-2.0.3.tgz",
++      "integrity": "sha1-foz42PW48jnBvGi+tOt4Vn1XLvg=",
++      "engines": {
++        "node": ">=0.4.0"
++      }
++    },
++    "node_modules/proxy-from-env": {
++      "version": "1.1.0",
++      "resolved": "https://registry.npm.taobao.org/proxy-from-env/download/proxy-from-env-1.1.0.tgz",
++      "integrity": "sha1-4QLxbKNVQkhldV0sno6k8k1Yw+I="
++    },
++    "node_modules/pump": {
++      "version": "3.0.0",
++      "resolved": "https://registry.npm.taobao.org/pump/download/pump-3.0.0.tgz",
++      "integrity": "sha1-tKIRaBW94vTh6mAjVOjHVWUQemQ=",
++      "dependencies": {
++        "end-of-stream": "^1.1.0",
++        "once": "^1.3.1"
++      }
++    },
++    "node_modules/puppeteer-core": {
++      "version": "9.0.0",
++      "resolved": "https://registry.nlark.com/puppeteer-core/download/puppeteer-core-9.0.0.tgz?cache=0&sync_timestamp=1619006868872&other_urls=https%3A%2F%2Fregistry.nlark.com%2Fpuppeteer-core%2Fdownload%2Fpuppeteer-core-9.0.0.tgz",
++      "integrity": "sha1-2ZrXuNS1sbCQl32Vy47q/XHRICc=",
++      "dependencies": {
++        "debug": "^4.1.0",
++        "devtools-protocol": "0.0.869402",
++        "extract-zip": "^2.0.0",
++        "https-proxy-agent": "^5.0.0",
++        "node-fetch": "^2.6.1",
++        "pkg-dir": "^4.2.0",
++        "progress": "^2.0.1",
++        "proxy-from-env": "^1.1.0",
++        "rimraf": "^3.0.2",
++        "tar-fs": "^2.0.0",
++        "unbzip2-stream": "^1.3.3",
++        "ws": "^7.2.3"
++      },
++      "engines": {
++        "node": ">=10.18.1"
++      }
++    },
++    "node_modules/readable-stream": {
++      "version": "3.6.0",
++      "resolved": "https://registry.npm.taobao.org/readable-stream/download/readable-stream-3.6.0.tgz",
++      "integrity": "sha1-M3u9o63AcGvT4CRCaihtS0sskZg=",
++      "dependencies": {
++        "inherits": "^2.0.3",
++        "string_decoder": "^1.1.1",
++        "util-deprecate": "^1.0.1"
++      },
++      "engines": {
++        "node": ">= 6"
++      }
++    },
++    "node_modules/rimraf": {
++      "version": "3.0.2",
++      "resolved": "https://registry.npm.taobao.org/rimraf/download/rimraf-3.0.2.tgz",
++      "integrity": "sha1-8aVAK6YiCtUswSgrrBrjqkn9Bho=",
++      "dependencies": {
++        "glob": "^7.1.3"
++      },
++      "bin": {
++        "rimraf": "bin.js"
++      }
++    },
++    "node_modules/safe-buffer": {
++      "version": "5.2.1",
++      "resolved": "https://registry.npm.taobao.org/safe-buffer/download/safe-buffer-5.2.1.tgz",
++      "integrity": "sha1-Hq+fqb2x/dTsdfWPnNtOa3gn7sY="
++    },
++    "node_modules/source-map": {
++      "version": "0.6.1",
++      "resolved": "https://registry.npm.taobao.org/source-map/download/source-map-0.6.1.tgz",
++      "integrity": "sha1-dHIq8y6WFOnCh6jQu95IteLxomM=",
++      "engines": {
++        "node": ">=0.10.0"
++      }
++    },
++    "node_modules/source-map-support": {
++      "version": "0.5.19",
++      "resolved": "https://registry.npm.taobao.org/source-map-support/download/source-map-support-0.5.19.tgz",
++      "integrity": "sha1-qYti+G3K9PZzmWSMCFKRq56P7WE=",
++      "dependencies": {
++        "buffer-from": "^1.0.0",
++        "source-map": "^0.6.0"
++      }
++    },
++    "node_modules/string_decoder": {
++      "version": "1.3.0",
++      "resolved": "https://registry.npm.taobao.org/string_decoder/download/string_decoder-1.3.0.tgz",
++      "integrity": "sha1-QvEUWUpGzxqOMLCoT1bHjD7awh4=",
++      "dependencies": {
++        "safe-buffer": "~5.2.0"
++      }
++    },
++    "node_modules/tar-fs": {
++      "version": "2.1.1",
++      "resolved": "https://registry.npm.taobao.org/tar-fs/download/tar-fs-2.1.1.tgz",
++      "integrity": "sha1-SJoVq4Xx8L76uzcLfeT561y+h4Q=",
++      "dependencies": {
++        "chownr": "^1.1.1",
++        "mkdirp-classic": "^0.5.2",
++        "pump": "^3.0.0",
++        "tar-stream": "^2.1.4"
++      }
++    },
++    "node_modules/tar-stream": {
++      "version": "2.2.0",
++      "resolved": "https://registry.npm.taobao.org/tar-stream/download/tar-stream-2.2.0.tgz?cache=0&sync_timestamp=1609236246435&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Ftar-stream%2Fdownload%2Ftar-stream-2.2.0.tgz",
++      "integrity": "sha1-rK2EwoQTawYNw/qmRHSqmuvXcoc=",
++      "dependencies": {
++        "bl": "^4.0.3",
++        "end-of-stream": "^1.4.1",
++        "fs-constants": "^1.0.0",
++        "inherits": "^2.0.3",
++        "readable-stream": "^3.1.1"
++      },
++      "engines": {
++        "node": ">=6"
++      }
++    },
++    "node_modules/through": {
++      "version": "2.3.8",
++      "resolved": "https://registry.npm.taobao.org/through/download/through-2.3.8.tgz",
++      "integrity": "sha1-DdTJ/6q8NXlgsbckEV1+Doai4fU="
++    },
++    "node_modules/ts-node": {
++      "version": "9.1.1",
++      "resolved": "https://registry.npm.taobao.org/ts-node/download/ts-node-9.1.1.tgz",
++      "integrity": "sha1-UamkUKPpWUAb2l8ASnLVS5NtN20=",
++      "dependencies": {
++        "arg": "^4.1.0",
++        "create-require": "^1.1.0",
++        "diff": "^4.0.1",
++        "make-error": "^1.1.1",
++        "source-map-support": "^0.5.17",
++        "yn": "3.1.1"
++      },
++      "bin": {
++        "ts-node": "dist/bin.js",
++        "ts-node-script": "dist/bin-script.js",
++        "ts-node-transpile-only": "dist/bin-transpile.js",
++        "ts-script": "dist/bin-script-deprecated.js"
++      },
++      "engines": {
++        "node": ">=10.0.0"
++      },
++      "peerDependencies": {
++        "typescript": ">=2.7"
++      }
++    },
++    "node_modules/typescript": {
++      "version": "4.2.4",
++      "resolved": "https://registry.npm.taobao.org/typescript/download/typescript-4.2.4.tgz",
++      "integrity": "sha1-hhC1l0feAo/aiYqK7w4QPxVtCWE=",
++      "peer": true,
++      "bin": {
++        "tsc": "bin/tsc",
++        "tsserver": "bin/tsserver"
++      },
++      "engines": {
++        "node": ">=4.2.0"
++      }
++    },
++    "node_modules/unbzip2-stream": {
++      "version": "1.4.3",
++      "resolved": "https://registry.npm.taobao.org/unbzip2-stream/download/unbzip2-stream-1.4.3.tgz",
++      "integrity": "sha1-sNoExDcTEd93HNwhXofyEwmRrOc=",
++      "dependencies": {
++        "buffer": "^5.2.1",
++        "through": "^2.3.8"
++      }
++    },
++    "node_modules/utf-8-validate": {
++      "version": "5.0.4",
++      "resolved": "https://registry.npm.taobao.org/utf-8-validate/download/utf-8-validate-5.0.4.tgz",
++      "integrity": "sha1-cqFzWYPd96BaQ6nGtnxc4ckQ+bg=",
++      "hasInstallScript": true,
++      "peer": true,
++      "dependencies": {
++        "node-gyp-build": "^4.2.0"
++      }
++    },
++    "node_modules/util-deprecate": {
++      "version": "1.0.2",
++      "resolved": "https://registry.npm.taobao.org/util-deprecate/download/util-deprecate-1.0.2.tgz?cache=0&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Futil-deprecate%2Fdownload%2Futil-deprecate-1.0.2.tgz",
++      "integrity": "sha1-RQ1Nyfpw3nMnYvvS1KKJgUGaDM8="
++    },
++    "node_modules/wrappy": {
++      "version": "1.0.2",
++      "resolved": "https://registry.npm.taobao.org/wrappy/download/wrappy-1.0.2.tgz",
++      "integrity": "sha1-tSQ9jz7BqjXxNkYFvA0QNuMKtp8="
++    },
++    "node_modules/ws": {
++      "version": "7.4.4",
++      "resolved": "https://registry.npm.taobao.org/ws/download/ws-7.4.4.tgz?cache=0&sync_timestamp=1615063662500&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fws%2Fdownload%2Fws-7.4.4.tgz",
++      "integrity": "sha1-ODvJdCyyAikskHfOq29gR7F/LVk=",
++      "engines": {
++        "node": ">=8.3.0"
++      },
++      "peerDependencies": {
++        "bufferutil": "^4.0.1",
++        "utf-8-validate": "^5.0.2"
++      }
++    },
++    "node_modules/yauzl": {
++      "version": "2.10.0",
++      "resolved": "https://registry.npm.taobao.org/yauzl/download/yauzl-2.10.0.tgz",
++      "integrity": "sha1-x+sXyT4RLLEIb6bY5R+wZnt5pfk=",
++      "dependencies": {
++        "buffer-crc32": "~0.2.3",
++        "fd-slicer": "~1.1.0"
++      }
++    },
++    "node_modules/yn": {
++      "version": "3.1.1",
++      "resolved": "https://registry.npm.taobao.org/yn/download/yn-3.1.1.tgz",
++      "integrity": "sha1-HodAGgnXZ8HV6rJqbkwYUYLS61A=",
++      "engines": {
++        "node": ">=6"
++      }
++    }
++  },
++  "dependencies": {
++    "@types/node": {
++      "version": "14.14.41",
++      "resolved": "https://registry.npm.taobao.org/@types/node/download/@types/node-14.14.41.tgz?cache=0&sync_timestamp=1618543947232&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2F%40types%2Fnode%2Fdownload%2F%40types%2Fnode-14.14.41.tgz",
++      "integrity": "sha1-0Lk52Uwde9U9BIJK9F8RObjEVhU=",
++      "devOptional": true
++    },
++    "@types/progress": {
++      "version": "2.0.3",
++      "resolved": "https://registry.nlark.com/@types/progress/download/@types/progress-2.0.3.tgz",
++      "integrity": "sha1-fMvZxtTWATGRJsRp5ztbuQ38jMw=",
++      "dev": true,
++      "requires": {
++        "@types/node": "*"
++      }
++    },
++    "@types/yauzl": {
++      "version": "2.9.1",
++      "resolved": "https://registry.npm.taobao.org/@types/yauzl/download/@types/yauzl-2.9.1.tgz",
++      "integrity": "sha1-0Q9p+fUi7vPPmOMK+2hKHh7JI68=",
++      "optional": true,
++      "requires": {
++        "@types/node": "*"
++      }
++    },
++    "agent-base": {
++      "version": "6.0.2",
++      "resolved": "https://registry.npm.taobao.org/agent-base/download/agent-base-6.0.2.tgz",
++      "integrity": "sha1-Sf/1hXfP7j83F2/qtMIuAPhtf3c=",
++      "requires": {
++        "debug": "4"
++      }
++    },
++    "arg": {
++      "version": "4.1.3",
++      "resolved": "https://registry.npm.taobao.org/arg/download/arg-4.1.3.tgz",
++      "integrity": "sha1-Jp/HrVuOQstjyJbVZmAXJhwUQIk="
++    },
++    "axios": {
++      "version": "0.21.1",
++      "resolved": "https://registry.npm.taobao.org/axios/download/axios-0.21.1.tgz",
++      "integrity": "sha1-IlY0gZYvTWvemnbVFu8OXTwJsrg=",
++      "requires": {
++        "follow-redirects": "^1.10.0"
++      }
++    },
++    "balanced-match": {
++      "version": "1.0.2",
++      "resolved": "https://registry.npm.taobao.org/balanced-match/download/balanced-match-1.0.2.tgz?cache=0&sync_timestamp=1617714298273&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fbalanced-match%2Fdownload%2Fbalanced-match-1.0.2.tgz",
++      "integrity": "sha1-6D46fj8wCzTLnYf2FfoMvzV2kO4="
++    },
++    "base64-js": {
++      "version": "1.5.1",
++      "resolved": "https://registry.npm.taobao.org/base64-js/download/base64-js-1.5.1.tgz",
++      "integrity": "sha1-GxtEAWClv3rUC2UPCVljSBkDkwo="
++    },
++    "bl": {
++      "version": "4.1.0",
++      "resolved": "https://registry.npm.taobao.org/bl/download/bl-4.1.0.tgz",
++      "integrity": "sha1-RRU1JkGCvsL7vIOmKrmM8R2fezo=",
++      "requires": {
++        "buffer": "^5.5.0",
++        "inherits": "^2.0.4",
++        "readable-stream": "^3.4.0"
++      }
++    },
++    "brace-expansion": {
++      "version": "1.1.11",
++      "resolved": "https://registry.npm.taobao.org/brace-expansion/download/brace-expansion-1.1.11.tgz?cache=0&sync_timestamp=1614010713935&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fbrace-expansion%2Fdownload%2Fbrace-expansion-1.1.11.tgz",
++      "integrity": "sha1-PH/L9SnYcibz0vUrlm/1Jx60Qd0=",
++      "requires": {
++        "balanced-match": "^1.0.0",
++        "concat-map": "0.0.1"
++      }
++    },
++    "buffer": {
++      "version": "5.7.1",
++      "resolved": "https://registry.npm.taobao.org/buffer/download/buffer-5.7.1.tgz?cache=0&sync_timestamp=1606098189689&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fbuffer%2Fdownload%2Fbuffer-5.7.1.tgz",
++      "integrity": "sha1-umLnwTEzBTWCGXFghRqPZI6Z7tA=",
++      "requires": {
++        "base64-js": "^1.3.1",
++        "ieee754": "^1.1.13"
++      }
++    },
++    "buffer-crc32": {
++      "version": "0.2.13",
++      "resolved": "https://registry.npm.taobao.org/buffer-crc32/download/buffer-crc32-0.2.13.tgz",
++      "integrity": "sha1-DTM+PwDqxQqhRUq9MO+MKl2ackI="
++    },
++    "buffer-from": {
++      "version": "1.1.1",
++      "resolved": "https://registry.npm.taobao.org/buffer-from/download/buffer-from-1.1.1.tgz",
++      "integrity": "sha1-MnE7wCj3XAL9txDXx7zsHyxgcO8="
++    },
++    "bufferutil": {
++      "version": "4.0.3",
++      "resolved": "https://registry.npm.taobao.org/bufferutil/download/bufferutil-4.0.3.tgz",
++      "integrity": "sha1-ZnJLdWvtI818KMTTBteZT5lDzGs=",
++      "peer": true,
++      "requires": {
++        "node-gyp-build": "^4.2.0"
++      }
++    },
++    "chownr": {
++      "version": "1.1.4",
++      "resolved": "https://registry.npm.taobao.org/chownr/download/chownr-1.1.4.tgz",
++      "integrity": "sha1-b8nXtC0ypYNZYzdmbn0ICE2izGs="
++    },
++    "concat-map": {
++      "version": "0.0.1",
++      "resolved": "https://registry.npm.taobao.org/concat-map/download/concat-map-0.0.1.tgz",
++      "integrity": "sha1-2Klr13/Wjfd5OnMDajug1UBdR3s="
++    },
++    "create-require": {
++      "version": "1.1.1",
++      "resolved": "https://registry.npm.taobao.org/create-require/download/create-require-1.1.1.tgz",
++      "integrity": "sha1-wdfo8eX2z8n/ZfnNNS03NIdWwzM="
++    },
++    "debug": {
++      "version": "4.3.1",
++      "resolved": "https://registry.npm.taobao.org/debug/download/debug-4.3.1.tgz?cache=0&sync_timestamp=1607566548985&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fdebug%2Fdownload%2Fdebug-4.3.1.tgz",
++      "integrity": "sha1-8NIpxQXgxtjEmsVT0bE9wYP2su4=",
++      "requires": {
++        "ms": "2.1.2"
++      }
++    },
++    "devtools-protocol": {
++      "version": "0.0.869402",
++      "resolved": "https://registry.nlark.com/devtools-protocol/download/devtools-protocol-0.0.869402.tgz?cache=0&other_urls=https%3A%2F%2Fregistry.nlark.com%2Fdevtools-protocol%2Fdownload%2Fdevtools-protocol-0.0.869402.tgz",
++      "integrity": "sha1-A63nAXYXQuQ65N5dwYi82A8VbY0="
++    },
++    "diff": {
++      "version": "4.0.2",
++      "resolved": "https://registry.npm.taobao.org/diff/download/diff-4.0.2.tgz",
++      "integrity": "sha1-YPOuy4nV+uUgwRqhnvwruYKq3n0="
++    },
++    "end-of-stream": {
++      "version": "1.4.4",
++      "resolved": "https://registry.npm.taobao.org/end-of-stream/download/end-of-stream-1.4.4.tgz",
++      "integrity": "sha1-WuZKX0UFe682JuwU2gyl5LJDHrA=",
++      "requires": {
++        "once": "^1.4.0"
++      }
++    },
++    "extract-zip": {
++      "version": "2.0.1",
++      "resolved": "https://registry.npm.taobao.org/extract-zip/download/extract-zip-2.0.1.tgz",
++      "integrity": "sha1-Zj3KVv5G34kNXxMe9KBtIruLoTo=",
++      "requires": {
++        "@types/yauzl": "^2.9.1",
++        "debug": "^4.1.1",
++        "get-stream": "^5.1.0",
++        "yauzl": "^2.10.0"
++      }
++    },
++    "fd-slicer": {
++      "version": "1.1.0",
++      "resolved": "https://registry.npm.taobao.org/fd-slicer/download/fd-slicer-1.1.0.tgz",
++      "integrity": "sha1-JcfInLH5B3+IkbvmHY85Dq4lbx4=",
++      "requires": {
++        "pend": "~1.2.0"
++      }
++    },
++    "find-up": {
++      "version": "4.1.0",
++      "resolved": "https://registry.npm.taobao.org/find-up/download/find-up-4.1.0.tgz",
++      "integrity": "sha1-l6/n1s3AvFkoWEt8jXsW6KmqXRk=",
++      "requires": {
++        "locate-path": "^5.0.0",
++        "path-exists": "^4.0.0"
++      }
++    },
++    "follow-redirects": {
++      "version": "1.14.0",
++      "resolved": "https://registry.nlark.com/follow-redirects/download/follow-redirects-1.14.0.tgz?cache=0&sync_timestamp=1619369154979&other_urls=https%3A%2F%2Fregistry.nlark.com%2Ffollow-redirects%2Fdownload%2Ffollow-redirects-1.14.0.tgz",
++      "integrity": "sha1-9dJg+VxfjBBYlEkf7uXciZO0Av4="
++    },
++    "fs-constants": {
++      "version": "1.0.0",
++      "resolved": "https://registry.npm.taobao.org/fs-constants/download/fs-constants-1.0.0.tgz",
++      "integrity": "sha1-a+Dem+mYzhavivwkSXue6bfM2a0="
++    },
++    "fs.realpath": {
++      "version": "1.0.0",
++      "resolved": "https://registry.npm.taobao.org/fs.realpath/download/fs.realpath-1.0.0.tgz",
++      "integrity": "sha1-FQStJSMVjKpA20onh8sBQRmU6k8="
++    },
++    "get-stream": {
++      "version": "5.2.0",
++      "resolved": "https://registry.npm.taobao.org/get-stream/download/get-stream-5.2.0.tgz?cache=0&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fget-stream%2Fdownload%2Fget-stream-5.2.0.tgz",
++      "integrity": "sha1-SWaheV7lrOZecGxLe+txJX1uItM=",
++      "requires": {
++        "pump": "^3.0.0"
++      }
++    },
++    "glob": {
++      "version": "7.1.6",
++      "resolved": "https://registry.npm.taobao.org/glob/download/glob-7.1.6.tgz",
++      "integrity": "sha1-FB8zuBp8JJLhJVlDB0gMRmeSeKY=",
++      "requires": {
++        "fs.realpath": "^1.0.0",
++        "inflight": "^1.0.4",
++        "inherits": "2",
++        "minimatch": "^3.0.4",
++        "once": "^1.3.0",
++        "path-is-absolute": "^1.0.0"
++      }
++    },
++    "https-proxy-agent": {
++      "version": "5.0.0",
++      "resolved": "https://registry.npm.taobao.org/https-proxy-agent/download/https-proxy-agent-5.0.0.tgz",
++      "integrity": "sha1-4qkFQqu2inYuCghQ9sntrf2FBrI=",
++      "requires": {
++        "agent-base": "6",
++        "debug": "4"
++      }
++    },
++    "ieee754": {
++      "version": "1.2.1",
++      "resolved": "https://registry.npm.taobao.org/ieee754/download/ieee754-1.2.1.tgz",
++      "integrity": "sha1-jrehCmP/8l0VpXsAFYbRd9Gw01I="
++    },
++    "inflight": {
++      "version": "1.0.6",
++      "resolved": "https://registry.npm.taobao.org/inflight/download/inflight-1.0.6.tgz",
++      "integrity": "sha1-Sb1jMdfQLQwJvJEKEHW6gWW1bfk=",
++      "requires": {
++        "once": "^1.3.0",
++        "wrappy": "1"
++      }
++    },
++    "inherits": {
++      "version": "2.0.4",
++      "resolved": "https://registry.npm.taobao.org/inherits/download/inherits-2.0.4.tgz",
++      "integrity": "sha1-D6LGT5MpF8NDOg3tVTY6rjdBa3w="
++    },
++    "locate-path": {
++      "version": "5.0.0",
++      "resolved": "https://registry.npm.taobao.org/locate-path/download/locate-path-5.0.0.tgz",
++      "integrity": "sha1-Gvujlq/WdqbUJQTQpno6frn2KqA=",
++      "requires": {
++        "p-locate": "^4.1.0"
++      }
++    },
++    "make-error": {
++      "version": "1.3.6",
++      "resolved": "https://registry.npm.taobao.org/make-error/download/make-error-1.3.6.tgz",
++      "integrity": "sha1-LrLjfqm2fEiR9oShOUeZr0hM96I="
++    },
++    "minimatch": {
++      "version": "3.0.4",
++      "resolved": "https://registry.npm.taobao.org/minimatch/download/minimatch-3.0.4.tgz",
++      "integrity": "sha1-UWbihkV/AzBgZL5Ul+jbsMPTIIM=",
++      "requires": {
++        "brace-expansion": "^1.1.7"
++      }
++    },
++    "mkdirp-classic": {
++      "version": "0.5.3",
++      "resolved": "https://registry.npm.taobao.org/mkdirp-classic/download/mkdirp-classic-0.5.3.tgz",
++      "integrity": "sha1-+hDJEVzG2IZb4iG6R+6b7XhgERM="
++    },
++    "ms": {
++      "version": "2.1.2",
++      "resolved": "https://registry.npm.taobao.org/ms/download/ms-2.1.2.tgz?cache=0&sync_timestamp=1607433912031&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fms%2Fdownload%2Fms-2.1.2.tgz",
++      "integrity": "sha1-0J0fNXtEP0kzgqjrPM0YOHKuYAk="
++    },
++    "node-fetch": {
++      "version": "2.6.1",
++      "resolved": "https://registry.npm.taobao.org/node-fetch/download/node-fetch-2.6.1.tgz",
++      "integrity": "sha1-BFvTI2Mfdu0uK1VXM5RBa2OaAFI="
++    },
++    "node-gyp-build": {
++      "version": "4.2.3",
++      "resolved": "https://registry.npm.taobao.org/node-gyp-build/download/node-gyp-build-4.2.3.tgz",
++      "integrity": "sha1-zmJ3+FODX3GIKe+0fbIPPk2cRzk=",
++      "peer": true
++    },
++    "once": {
++      "version": "1.4.0",
++      "resolved": "https://registry.npm.taobao.org/once/download/once-1.4.0.tgz",
++      "integrity": "sha1-WDsap3WWHUsROsF9nFC6753Xa9E=",
++      "requires": {
++        "wrappy": "1"
++      }
++    },
++    "p-limit": {
++      "version": "2.3.0",
++      "resolved": "https://registry.npm.taobao.org/p-limit/download/p-limit-2.3.0.tgz?cache=0&sync_timestamp=1606288370125&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fp-limit%2Fdownload%2Fp-limit-2.3.0.tgz",
++      "integrity": "sha1-PdM8ZHohT9//2DWTPrCG2g3CHbE=",
++      "requires": {
++        "p-try": "^2.0.0"
++      }
++    },
++    "p-locate": {
++      "version": "4.1.0",
++      "resolved": "https://registry.npm.taobao.org/p-locate/download/p-locate-4.1.0.tgz",
++      "integrity": "sha1-o0KLtwiLOmApL2aRkni3wpetTwc=",
++      "requires": {
++        "p-limit": "^2.2.0"
++      }
++    },
++    "p-try": {
++      "version": "2.2.0",
++      "resolved": "https://registry.npm.taobao.org/p-try/download/p-try-2.2.0.tgz",
++      "integrity": "sha1-yyhoVA4xPWHeWPr741zpAE1VQOY="
++    },
++    "pack": {
++      "version": "2.2.0",
++      "resolved": "https://registry.npm.taobao.org/pack/download/pack-2.2.0.tgz",
++      "integrity": "sha1-isTjFrdxZGpZ8uejX52y3xwU4nQ="
++    },
++    "path-exists": {
++      "version": "4.0.0",
++      "resolved": "https://registry.npm.taobao.org/path-exists/download/path-exists-4.0.0.tgz",
++      "integrity": "sha1-UTvb4tO5XXdi6METfvoZXGxhtbM="
++    },
++    "path-is-absolute": {
++      "version": "1.0.1",
++      "resolved": "https://registry.npm.taobao.org/path-is-absolute/download/path-is-absolute-1.0.1.tgz",
++      "integrity": "sha1-F0uSaHNVNP+8es5r9TpanhtcX18="
++    },
++    "pend": {
++      "version": "1.2.0",
++      "resolved": "https://registry.npm.taobao.org/pend/download/pend-1.2.0.tgz",
++      "integrity": "sha1-elfrVQpng/kRUzH89GY9XI4AelA="
++    },
++    "pkg-dir": {
++      "version": "4.2.0",
++      "resolved": "https://registry.npm.taobao.org/pkg-dir/download/pkg-dir-4.2.0.tgz",
++      "integrity": "sha1-8JkTPfft5CLoHR2ESCcO6z5CYfM=",
++      "requires": {
++        "find-up": "^4.0.0"
++      }
++    },
++    "progress": {
++      "version": "2.0.3",
++      "resolved": "https://registry.npm.taobao.org/progress/download/progress-2.0.3.tgz",
++      "integrity": "sha1-foz42PW48jnBvGi+tOt4Vn1XLvg="
++    },
++    "proxy-from-env": {
++      "version": "1.1.0",
++      "resolved": "https://registry.npm.taobao.org/proxy-from-env/download/proxy-from-env-1.1.0.tgz",
++      "integrity": "sha1-4QLxbKNVQkhldV0sno6k8k1Yw+I="
++    },
++    "pump": {
++      "version": "3.0.0",
++      "resolved": "https://registry.npm.taobao.org/pump/download/pump-3.0.0.tgz",
++      "integrity": "sha1-tKIRaBW94vTh6mAjVOjHVWUQemQ=",
++      "requires": {
++        "end-of-stream": "^1.1.0",
++        "once": "^1.3.1"
++      }
++    },
++    "puppeteer-core": {
++      "version": "9.0.0",
++      "resolved": "https://registry.nlark.com/puppeteer-core/download/puppeteer-core-9.0.0.tgz?cache=0&sync_timestamp=1619006868872&other_urls=https%3A%2F%2Fregistry.nlark.com%2Fpuppeteer-core%2Fdownload%2Fpuppeteer-core-9.0.0.tgz",
++      "integrity": "sha1-2ZrXuNS1sbCQl32Vy47q/XHRICc=",
++      "requires": {
++        "debug": "^4.1.0",
++        "devtools-protocol": "0.0.869402",
++        "extract-zip": "^2.0.0",
++        "https-proxy-agent": "^5.0.0",
++        "node-fetch": "^2.6.1",
++        "pkg-dir": "^4.2.0",
++        "progress": "^2.0.1",
++        "proxy-from-env": "^1.1.0",
++        "rimraf": "^3.0.2",
++        "tar-fs": "^2.0.0",
++        "unbzip2-stream": "^1.3.3",
++        "ws": "^7.2.3"
++      }
++    },
++    "readable-stream": {
++      "version": "3.6.0",
++      "resolved": "https://registry.npm.taobao.org/readable-stream/download/readable-stream-3.6.0.tgz",
++      "integrity": "sha1-M3u9o63AcGvT4CRCaihtS0sskZg=",
++      "requires": {
++        "inherits": "^2.0.3",
++        "string_decoder": "^1.1.1",
++        "util-deprecate": "^1.0.1"
++      }
++    },
++    "rimraf": {
++      "version": "3.0.2",
++      "resolved": "https://registry.npm.taobao.org/rimraf/download/rimraf-3.0.2.tgz",
++      "integrity": "sha1-8aVAK6YiCtUswSgrrBrjqkn9Bho=",
++      "requires": {
++        "glob": "^7.1.3"
++      }
++    },
++    "safe-buffer": {
++      "version": "5.2.1",
++      "resolved": "https://registry.npm.taobao.org/safe-buffer/download/safe-buffer-5.2.1.tgz",
++      "integrity": "sha1-Hq+fqb2x/dTsdfWPnNtOa3gn7sY="
++    },
++    "source-map": {
++      "version": "0.6.1",
++      "resolved": "https://registry.npm.taobao.org/source-map/download/source-map-0.6.1.tgz",
++      "integrity": "sha1-dHIq8y6WFOnCh6jQu95IteLxomM="
++    },
++    "source-map-support": {
++      "version": "0.5.19",
++      "resolved": "https://registry.npm.taobao.org/source-map-support/download/source-map-support-0.5.19.tgz",
++      "integrity": "sha1-qYti+G3K9PZzmWSMCFKRq56P7WE=",
++      "requires": {
++        "buffer-from": "^1.0.0",
++        "source-map": "^0.6.0"
++      }
++    },
++    "string_decoder": {
++      "version": "1.3.0",
++      "resolved": "https://registry.npm.taobao.org/string_decoder/download/string_decoder-1.3.0.tgz",
++      "integrity": "sha1-QvEUWUpGzxqOMLCoT1bHjD7awh4=",
++      "requires": {
++        "safe-buffer": "~5.2.0"
++      }
++    },
++    "tar-fs": {
++      "version": "2.1.1",
++      "resolved": "https://registry.npm.taobao.org/tar-fs/download/tar-fs-2.1.1.tgz",
++      "integrity": "sha1-SJoVq4Xx8L76uzcLfeT561y+h4Q=",
++      "requires": {
++        "chownr": "^1.1.1",
++        "mkdirp-classic": "^0.5.2",
++        "pump": "^3.0.0",
++        "tar-stream": "^2.1.4"
++      }
++    },
++    "tar-stream": {
++      "version": "2.2.0",
++      "resolved": "https://registry.npm.taobao.org/tar-stream/download/tar-stream-2.2.0.tgz?cache=0&sync_timestamp=1609236246435&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Ftar-stream%2Fdownload%2Ftar-stream-2.2.0.tgz",
++      "integrity": "sha1-rK2EwoQTawYNw/qmRHSqmuvXcoc=",
++      "requires": {
++        "bl": "^4.0.3",
++        "end-of-stream": "^1.4.1",
++        "fs-constants": "^1.0.0",
++        "inherits": "^2.0.3",
++        "readable-stream": "^3.1.1"
++      }
++    },
++    "through": {
++      "version": "2.3.8",
++      "resolved": "https://registry.npm.taobao.org/through/download/through-2.3.8.tgz",
++      "integrity": "sha1-DdTJ/6q8NXlgsbckEV1+Doai4fU="
++    },
++    "ts-node": {
++      "version": "9.1.1",
++      "resolved": "https://registry.npm.taobao.org/ts-node/download/ts-node-9.1.1.tgz",
++      "integrity": "sha1-UamkUKPpWUAb2l8ASnLVS5NtN20=",
++      "requires": {
++        "arg": "^4.1.0",
++        "create-require": "^1.1.0",
++        "diff": "^4.0.1",
++        "make-error": "^1.1.1",
++        "source-map-support": "^0.5.17",
++        "yn": "3.1.1"
++      }
++    },
++    "typescript": {
++      "version": "4.2.4",
++      "resolved": "https://registry.npm.taobao.org/typescript/download/typescript-4.2.4.tgz",
++      "integrity": "sha1-hhC1l0feAo/aiYqK7w4QPxVtCWE=",
++      "peer": true
++    },
++    "unbzip2-stream": {
++      "version": "1.4.3",
++      "resolved": "https://registry.npm.taobao.org/unbzip2-stream/download/unbzip2-stream-1.4.3.tgz",
++      "integrity": "sha1-sNoExDcTEd93HNwhXofyEwmRrOc=",
++      "requires": {
++        "buffer": "^5.2.1",
++        "through": "^2.3.8"
++      }
++    },
++    "utf-8-validate": {
++      "version": "5.0.4",
++      "resolved": "https://registry.npm.taobao.org/utf-8-validate/download/utf-8-validate-5.0.4.tgz",
++      "integrity": "sha1-cqFzWYPd96BaQ6nGtnxc4ckQ+bg=",
++      "peer": true,
++      "requires": {
++        "node-gyp-build": "^4.2.0"
++      }
++    },
++    "util-deprecate": {
++      "version": "1.0.2",
++      "resolved": "https://registry.npm.taobao.org/util-deprecate/download/util-deprecate-1.0.2.tgz?cache=0&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Futil-deprecate%2Fdownload%2Futil-deprecate-1.0.2.tgz",
++      "integrity": "sha1-RQ1Nyfpw3nMnYvvS1KKJgUGaDM8="
++    },
++    "wrappy": {
++      "version": "1.0.2",
++      "resolved": "https://registry.npm.taobao.org/wrappy/download/wrappy-1.0.2.tgz",
++      "integrity": "sha1-tSQ9jz7BqjXxNkYFvA0QNuMKtp8="
++    },
++    "ws": {
++      "version": "7.4.4",
++      "resolved": "https://registry.npm.taobao.org/ws/download/ws-7.4.4.tgz?cache=0&sync_timestamp=1615063662500&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fws%2Fdownload%2Fws-7.4.4.tgz",
++      "integrity": "sha1-ODvJdCyyAikskHfOq29gR7F/LVk=",
++      "requires": {}
++    },
++    "yauzl": {
++      "version": "2.10.0",
++      "resolved": "https://registry.npm.taobao.org/yauzl/download/yauzl-2.10.0.tgz",
++      "integrity": "sha1-x+sXyT4RLLEIb6bY5R+wZnt5pfk=",
++      "requires": {
++        "buffer-crc32": "~0.2.3",
++        "fd-slicer": "~1.1.0"
++      }
++    },
++    "yn": {
++      "version": "3.1.1",
++      "resolved": "https://registry.npm.taobao.org/yn/download/yn-3.1.1.tgz",
++      "integrity": "sha1-HodAGgnXZ8HV6rJqbkwYUYLS61A="
++    }
++  }
++}
+Index: progressT.ts
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/progressT.ts b/progressT.ts
+new file mode 100644
+--- /dev/null	(date 1620216912013)
++++ b/progressT.ts	(date 1620216912013)
+@@ -0,0 +1,30 @@
++import ProgressBar from "progress";
++import https from "https";
++
++var req = https.request({
++    host: 'download.github.com',
++    port: 443,
++    path: '/visionmedia-node-jscoverage-0d4608a.zip'
++});
++
++req.on('response', function(res){
++    var len = parseInt(res.headers['content-length'], 10);
++
++    console.log();
++    var bar = new ProgressBar('  downloading [:bar] :rate/bps :percent :etas', {
++        complete: '=',
++        incomplete: ' ',
++        width: 40,
++        total: len
++    });
++
++    res.on('data', function (chunk) {
++        bar.tick(chunk.length);
++    });
++
++    res.on('end', function () {
++        console.log('\n');
++    });
++});
++
++req.end();
+\ No newline at end of file
+Index: .idea/jsLibraryMappings.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/jsLibraryMappings.xml b/.idea/jsLibraryMappings.xml
+new file mode 100644
+--- /dev/null	(date 1620216912401)
++++ b/.idea/jsLibraryMappings.xml	(date 1620216912401)
+@@ -0,0 +1,6 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<project version="4">
++  <component name="JavaScriptLibraryMappings">
++    <includedPredefinedLibrary name="Node.js Core" />
++  </component>
++</project>
+\ No newline at end of file
+diff --git a/build/binding.vcxproj b/build/binding.vcxproj
+new file mode 100644
+diff --git a/build/config.gypi b/build/config.gypi
+new file mode 100644
+diff --git a/build/binding.vcxproj.filters b/build/binding.vcxproj.filters
+new file mode 100644
+diff --git a/binding.gyp b/binding.gyp
+new file mode 100644
+diff --git a/1.txt b/1.txt
+new file mode 100644
+diff --git a/.idea/.gitignore b/.idea/.gitignore
+new file mode 100644
+diff --git a/三国杀.ts b/三国杀.ts
+new file mode 100644
+diff --git a/1.html b/1.html
+new file mode 100644
